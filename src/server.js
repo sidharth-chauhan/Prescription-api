@@ -16,6 +16,14 @@ app.get('/', (req, res) => {
 const registerRoute=require('./routes/register.js');
 app.use('/auth',registerRoute);
 
+app.get('/protected', jwtAuthMiddleware, (req, res) => {
+  const user = req.user;
+  res.json({ message: 'This is a protected route', user });
+})
+
+const prescriptionRoutes = require('./routes/prescription');
+app.use('/prescription', jwtAuthMiddleware, prescriptionRoutes);
+
 
 
 
