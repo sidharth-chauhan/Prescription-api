@@ -60,6 +60,19 @@ router.post('/add',upload.single('image'), async(req,res)=>{
   }
 })
 
+router.get('/',async(req,res)=>{
+  try{
+    const userId=req.user.id;
+    const prescriptions= await Prescription.find({userId:userId, isDeleted:false}).sort({createdAt:-1});
+
+    res.status(200).json({prescriptions});
+
+  }catch(err){
+    console.error('Error fetching prescriptions:',err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 
 module.exports = router;
