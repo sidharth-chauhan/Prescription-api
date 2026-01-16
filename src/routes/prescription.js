@@ -96,8 +96,31 @@ router.delete('/:id', async(req,res)=>{
     });
 
 
-  }catch{
+  }catch(err){
+    console.error('Error deleting prescription:',err);
+    res.status(500).json({ message: 'Internal server error' });
+    
 
+  }
+})
+
+router.get('/:id', async(req,res)=>{
+  try{
+    const userId=req.user.id;
+    const prescriptionId=req.params.id;
+
+    const precription=await Prescription.findOne({
+      _id:prescriptionId,
+      userId:userId,
+    })
+    if (!precription){
+      return res.status(404).json({message:'Prescription not found'});
+    }
+    res.status(200).json({prescription:precription});
+
+  }catch(err){
+    console.error('Error fetching prescription details:',err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 })
 
