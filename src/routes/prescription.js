@@ -73,6 +73,34 @@ router.get('/',async(req,res)=>{
   }
 });
 
+router.delete('/:id', async(req,res)=>{
+  try{
+    const userId=req.user.id;
+    const prescriptionId=req.params.id;
+
+    const prescription=await Prescription.findOne({
+      _id:prescriptionId,
+      userId:userId,
+      isDeleted:false
+    })
+
+    if (!prescription){
+      return res.status(404).json({message:'Prescription not found'});
+    }
+    prescription.isDeleted=true;
+    await prescription.save();
+
+    res.status(200).json({
+      message:'Prescription deleted successfully',
+      prescriptionId:prescriptionId
+    });
+
+
+  }catch{
+
+  }
+})
+
 
 
 module.exports = router;
