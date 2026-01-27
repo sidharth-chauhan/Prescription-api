@@ -2,8 +2,10 @@ const express = require('express')
 const app = express()
 const db= require('./db')
 const port = 3000
+const cors = require('cors')
 const { jwtAuthMiddleware, generateJwt } = require('./utils/jwt')
 
+app.use(cors());
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
